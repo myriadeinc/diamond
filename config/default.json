@@ -1,0 +1,15 @@
+{
+    "service": {
+        "name": "diamond"
+    },
+    "port": 8180,
+    "db": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "postgres",
+        "schema": "Diamond",
+        "username": "postgres",
+        "password": "postgres",
+        "model_path": "src/model/"
+    }
+}
