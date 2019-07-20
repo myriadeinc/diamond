@@ -14,7 +14,6 @@ const start = async () => {
   logger.core.info('Initializing database.');
 
   await db.init(
-      config.get('database_url'),
       config.get('db'),
       logger.db
   );

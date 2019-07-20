@@ -7,6 +7,7 @@ const Sequelize = require('sequelize');
 
 delete require('pg').native;
 
+
 const getOptions = (opt, log) => {
   if (opt.dialect_options) {
     opt.dialectOptions = opt.dialect_options;
@@ -39,8 +40,8 @@ const getOptions = (opt, log) => {
   return Options;
 };
 
-const initSchema = async (log) => {
-  const schemaName = Options.define.schema;
+const initSchema = async (opt, log) => {
+  const schemaName = opt.schema;
   const res = await DB.sequelize.query(`SELECT schema_name FROM `+
   ` information_schema.schemata `+
   `WHERE schema_name = '${schemaName}'`,
@@ -53,7 +54,7 @@ const initSchema = async (log) => {
 };
 
 const initModels = async (modelPath, log) => {
-  const modelFiles = fs.readFileSync(modelPath);
+  const modelFiles = fs.readdirSync(modelPath);
   for (const file of modelFiles) {
     const filePath = path.resolve(modelPath, file);
     try {
@@ -63,7 +64,8 @@ const initModels = async (modelPath, log) => {
         log.info('Loaded DB model:', model.name);
       }
     } catch (err) {
-      log.info('Unable to load DB model:', model.name);
+      log.info('Unable to load DB model');
+      log.error(err);
     }
   }
 };
@@ -77,7 +79,7 @@ const DB = {
 
   init: async (opt = null, log = null) => {
     DB.sequelize = new Sequelize(getOptions(opt, log));
-    await initSchema(log);
+    await initSchema(opt, log);
     await initModels(opt.model_path, log);
   },
 

@@ -10,6 +10,6 @@
         "schema": "Diamond",
         "username": "postgres",
         "password": "postgres",
-        "model_path": "src/model/"
+        "model_path": "src/models/"
     }
 }
