@@ -4,7 +4,7 @@
   "description": "Identity Service for Myriade",
   "main": "src/main.js",
   "repository": "https://github.com/myriadeinc/diamond.git",
-  "author": "Han Xiao <yhxiao97@gmail.com>",
+  "author": "Myriade Inc.",
   "scripts": {
     "start:dev": "nodemon -L --ignore test src/main.js",
     "start": "node src/main.js",
