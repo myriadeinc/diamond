@@ -1,0 +1,14 @@
+{
+  "name": "diamond",
+  "version": "1.0.0",
+  "description": "Identity Service for Myriade",
+  "main": "index.js",
+  "repository": "https://github.com/myriadeinc/diamond.git",
+  "author": "Han Xiao <yhxiao97@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "sequelize": "^5.10.1"
+  }
+}
