@@ -8,7 +8,9 @@
   "scripts": {
     "start:dev": "nodemon -L --ignore test src/main.js",
     "start": "node src/main.js",
-    "lint": "eslint --fix src"
+    "lint": "eslint --fix src",
+    "migration:up" : "node scripts/migration.up.js",
+    "migration:generate": "node scripts/generate.migration.js"
   },
   "license": "MIT",
   "dependencies": {

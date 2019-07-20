@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
+const Umzug = require('umzug');
 
 delete require('pg').native;
 
@@ -70,6 +71,51 @@ const initModels = async (modelPath, log) => {
   }
 };
 
+const initMigrationModel = (opt) => {
+  DB.MigrationModel = DB.sequelize.define(opt.migrations.model_name, {
+    migration: {
+      type: DB.Sequelize.STRING,
+      allowNull: false,
+      primaryKey: true,
+    },
+  }, {
+    createdAt: 'executedAt',
+    updatedAt: false,
+    paranoid: false,
+  });
+};
+
+const initUmzug = (opt, log) => {
+  let pattern = /^\d+-.*\.js$/;
+  if (opt.migrations.pattern) {
+    try {
+      pattern = RegExp(opt.pattern);
+    } catch (e) {
+      throw new Error(
+          `Database config value `+
+        `migrations:pattern must be a valid`+
+        ` regular expression: ${e.message}`
+      );
+    }
+  }
+
+  DB.umzug = new Umzug({
+    storage: 'sequelize',
+    logging: log,
+    storageOptions: {
+      sequelize: DB.sequelize,
+      model: DB.MigrationModel,
+      modelName: opt.migrations.model_name,
+      columnName: 'migration',
+    },
+    migrations: {
+      params: [DB.sequelize.getQueryInterface(), opt.schema, Sequelize],
+      path: opt.migrations.path,
+      pattern,
+    },
+  });
+};
+
 const DB = {
 
   Sequelize: Sequelize,
@@ -81,10 +127,19 @@ const DB = {
     DB.sequelize = new Sequelize(getOptions(opt, log));
     await initSchema(opt, log);
     await initModels(opt.model_path, log);
+    await initMigrationModel(opt);
+    await initUmzug(opt);
   },
 
   close: async () => {
     await DB.sequelize.connectionManager.close();
+  },
+
+  migrate: async (opt, log) => {
+    if (_.isEmpty(DB.umzug)) {
+      await initUmzug(opt, log);
+    }
+    return DB.umzug.up();
   },
 };
 
