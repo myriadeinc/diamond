@@ -19,6 +19,7 @@
     "big-integer": "^1.6.44",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.12",
+    "egads": "^1.0.2",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "nconf": "^0.10.0",

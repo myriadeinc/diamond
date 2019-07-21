@@ -11,4 +11,5 @@ module.exports = {
   core: logger.child({component: 'core'}),
   db: logger.child({component: 'db'}),
   auth: logger.child({component: 'auth'}),
+  account: logger.child({component: 'account'}),
 };

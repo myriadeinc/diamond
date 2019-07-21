@@ -32,7 +32,7 @@ const AccountModel = DB.sequelize.define('Accounts', {
     },
   },
 
-  credentials: {
+  credential: {
     type: DB.Sequelize.JSONB,
     allowNull: false,
     defaultValue: {},
@@ -133,7 +133,7 @@ AccountModel.cleanName = (name) => {
 
 AccountModel.validFields = ['email', 'name',
   'firstName', 'lastName', 'phoneNumber',
-  'gender', 'birthday',
+  'gender', 'birthday', 'credential',
 ];
 
 AccountModel.prototype.toJSON = function(unsafe = false) {
