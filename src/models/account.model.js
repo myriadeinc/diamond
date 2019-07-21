@@ -32,10 +32,10 @@ const AccountModel = DB.sequelize.define('Accounts', {
     },
   },
 
-  credentials : {
+  credentials: {
     type: DB.Sequelize.JSONB,
     allowNull: false,
-    defaultValue: {}
+    defaultValue: {},
   },
 
   name: {
