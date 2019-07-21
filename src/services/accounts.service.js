@@ -71,6 +71,32 @@ const AccountServices = {
     });
   },
 
+  // Account Service Ops
+
+  /**
+   * Validate a pair of password and email, if successful returns account
+   *    otherwise returns empty object
+   * @param {string} email
+   * @param {string} password
+   * @return {object}
+   */
+  validatePassword: async (email, password) => {
+    const hashedPwd = await hashPassword(password);
+    let account = await AccountModel.findOne({
+      where: {
+        email,
+      },
+    });
+    let success = false;
+    if (account.credential && 'bcrypt' === account.credential.hash) {
+      if (account.credential.password === hashedPwd) {
+        success = true;
+      }
+    }
+    account = success ? account : {};
+    return account.toJSON();
+  },
+
 };
 
 module.exports = AccountServices;
