@@ -16,5 +16,16 @@
             "model_name": "Migrations",
             "pattern": "^.+\\.js$"
         }
+    },
+    "jwt": {
+        "public_key": "__REPLACE__",
+        "private_key": "__REPLACE__",
+        "algorithm": "__REPLACE__"
+    },
+    "passwords": {
+        "hash_salt_rounds": 10,
+        "minimum_strength_score": 1,
+        "minimum_length": 8,
+        "maximum_length": 64
     }
 }
