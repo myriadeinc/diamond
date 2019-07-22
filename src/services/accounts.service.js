@@ -8,7 +8,7 @@ const AccountModel = require('src/models/account.model.js');
 
 const hashPassword = (pwd) => {
   const numHashSaltRounds = Number(config.get('passwords:hash_salt_rounds'));
-  return bcrypt.hash(password, numHashSaltRounds);
+  return bcrypt.hash(pwd, numHashSaltRounds);
 };
 
 const omittedFields = [
@@ -32,8 +32,15 @@ const AccountServices = {
       password: hashedPassword,
       hash: 'bcrypt',
     };
-    const filteredData = _.pick(data, AccountsModel.validFields);
-    return AccountsModel.create(filteredData);
+    const filteredData = _.pick(data, AccountModel.validFields);
+    let acc;
+    try {
+      acc = await AccountModel.create(filteredData);
+    } catch (err) {
+      logger.error(err);
+      throw new Err.Account();
+    }
+    return acc.toJSON();
   },
 
   getAccount: (accountId) => {
@@ -81,20 +88,20 @@ const AccountServices = {
    * @return {object}
    */
   validatePassword: async (email, password) => {
-    const hashedPwd = await hashPassword(password);
     let account = await AccountModel.findOne({
       where: {
-        email,
+        email: email,
       },
     });
     let success = false;
-    if (account.credential && 'bcrypt' === account.credential.hash) {
-      if (account.credential.password === hashedPwd) {
-        success = true;
-      }
+    if (account && account.dataValues.credential
+      && 'bcrypt' === account.dataValues.credential.hash) {
+      success = await bcrypt.compare(
+          password,
+          account.dataValues.credential.password);
     }
-    account = success ? account : {};
-    return account.toJSON();
+    account = success ? account.toJSON() : {};
+    return account;
   },
 
 };
