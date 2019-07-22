@@ -8,6 +8,7 @@
   "scripts": {
     "start:dev": "nodemon -L --ignore test src/main.js",
     "start": "node src/main.js",
+    "test": "mocha --color --recursive 'test'",
     "lint": "eslint --fix src",
     "migration:up": "node scripts/migration.up.js",
     "migration:generate": "node scripts/generate.migration.js"
@@ -30,8 +31,12 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-string": "^1.5.0",
     "eslint": "^6.0.1",
     "eslint-config-google": "^0.13.0",
+    "mocha": "^6.2.0",
     "nodemon": "^1.19.1"
   }
 }
