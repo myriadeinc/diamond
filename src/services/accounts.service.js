@@ -86,15 +86,14 @@ const AccountServices = {
    * @return {boolean}
    */
   emailExists: async (email) => {
-    let account = await AccountModel.findOne({
+    const account = await AccountModel.findOne({
       where: {
         email: email,
       },
     });
     if (account) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   },
