@@ -1,4 +1,3 @@
-'use strict';
 const config = require('src/util/config.js');
 
 class MailerAPI {
@@ -20,18 +19,18 @@ class MailerAPI {
         const msg = {
             to: recipient,
             from: 'no-reply@myriade.io',
-            subject: "VOID",
-            text: "VOID",
+            subject: "",
+            text: "",
             html:"",
             ...message
         }
-        if ('local' === config.get('NODE_ENV')){
-            console.log(msg);
-        }
-        else {
+        if (config.get('mail:enable')){
             await this.sgMail.send(msg);
         }
+        else {
+            console.log(msg);
+        }
     }
-}
+};
 
-export default MailerAPI;
+module.exports = MailerAPI;

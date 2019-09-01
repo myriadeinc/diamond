@@ -3,21 +3,32 @@ const MailerApi = require('src/api/mailer.api.js');
 const logger = require('src/util/logger.js').account;
 const AccountService = require('src/services/accounts.service.js');
 const encryption = require('src/util/encryption.js');
+const config = require('src/util/config.js');
+
+const mailer = new MailerApi();
 
 const EmailVerificationService = {
 
     verifyEmail : async (email) => {
-        const exists = await AccountService.emailExists(email);
-        if (!exists){
-            const confirmStr = await encryption.encrypt(email);
-            console.log(confirmStr);
-            // await MailerApi.send({
-            //     text:`confirm your email by clicking this link ${}`
-            // })
+        try{
+            const exists = await AccountService.emailExists(email);
+            if (exists){
+                return false;
+            }
+           
+            const tok = await encryption.encrypt(email);
+            //const url = `https://${config.get('service:host')}/v1/email/validate?token=${tok}`;            
+            await mailer.send(email, {
+                subject: "Confirm your email",
+                text:`Token: ${tok}`
+                // text:`confirm your email by clicking this link ${url}`,
+                // html: `<a href="${url}">Confirm Email</a>`
+            });
+            return true;
         }
-        else {
-            logger.info(`email ${email} already exists`);
-            return;
+        catch(err){
+            logger.error(err);
+            return false;
         }
     }
 }

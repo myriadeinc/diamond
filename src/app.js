@@ -2,6 +2,7 @@
 
 const express = require('express');
 const routes = require('src/routes');
+const bodyParser = require('body-parser')
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
 
 app.enable('trust proxy');
 app.disable('x-powered-by');
+app.use(bodyParser.json());
+
 
 app.use('/v1', routes);
 
