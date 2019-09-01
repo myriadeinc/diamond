@@ -19,7 +19,6 @@ const start = async () => {
   );
   logger.core.info('Database initialized.');
 
-
   const port = config.get('port');
   const app = require('./app');
   server = app.listen(port, () => {

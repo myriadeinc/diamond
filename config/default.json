@@ -22,6 +22,9 @@
         "private_key": "__REPLACE__",
         "algorithm": "__REPLACE__"
     },
+    "mail": {
+        "sendgrid_key": "__REPLACE__"
+    },
     "passwords": {
         "hash_salt_rounds": 10,
         "minimum_strength_score": 1,
