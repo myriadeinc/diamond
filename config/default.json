@@ -1,12 +1,13 @@
 {
     "service": {
-        "name": "diamond"
+        "name": "diamond",
+        "host": "0.0.0.0:8180"
     },
     "port": 8180,
     "db": {
         "host": "localhost",
         "port": 5432,
-        "database": "postgres",
+        "database": "myriade",
         "schema": "Diamond",
         "username": "postgres",
         "password": "postgres",
@@ -17,10 +18,20 @@
             "pattern": "^.+\\.js$"
         }
     },
+    "cache": {
+        "host": "localhost",
+        "port": 6379,
+        "user": "",
+        "db": "0"
+    },
     "jwt": {
         "public_key": "__REPLACE__",
         "private_key": "__REPLACE__",
         "algorithm": "__REPLACE__"
+    },
+    "mail": {
+        "enable": false,
+        "sendgrid_key": "__REPLACE__"
     },
     "passwords": {
         "hash_salt_rounds": 10,
