@@ -26,7 +26,7 @@ class MailerAPI {
             ...message
         }
         if ('local' === config.get('NODE_ENV')){
-            
+            console.log(msg);
         }
         else {
             await this.sgMail.send(msg);
