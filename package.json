@@ -24,6 +24,7 @@
     "egads": "^1.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "nconf": "^0.10.0",
     "node-rsa": "^1.0.5",
