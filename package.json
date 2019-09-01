@@ -6,7 +6,7 @@
   "repository": "https://github.com/myriadeinc/diamond.git",
   "author": "Myriade Inc.",
   "scripts": {
-    "start:dev": "nodemon -L --ignore test src/main.js",
+    "start:dev": "nodemon --inspect=0.0.0.0:9873 -L --ignore test src/main.js",
     "start": "node src/main.js",
     "test": "mocha --color --recursive 'test'",
     "lint": "eslint --fix src",
