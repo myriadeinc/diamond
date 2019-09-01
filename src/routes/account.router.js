@@ -21,7 +21,7 @@ router.get(`/:accountId`,
       });
 });
 
-router.post('/', 
+router.post('/create', 
   [
     check('email_token').exists(),
     check('password').exists()
@@ -38,25 +38,44 @@ router.post('/',
       });
 });
 
-router.put(`/:accountId`, (req, res) => {
-  return AccountService.updateAccount(req.params.accountId, req.body)
-      .then((acc) => {
-        res.status(200).send(acc.toJSON());
-      })
-      .catch((err) => {
-        res.sendStatus(500);
-      });
-});
+router.post('/login',
+  [
+    check('email').exists().isEmail(),
+    check('password').exists()
+  ],
+  RequestValidationMiddleware.handleErrors,
+  (req, res, next) => {
+    
+  }
+);
 
-router.delete(`/:accountId`, (req, res) => {
-  return AccountService.deleteAccount(req.params.accountId)
-      .then(() => {
-        res.sendStatus(200);
-      })
-      .catch((err) => {
-        res.sendStatus(404);
-      });
-});
+router.post('/address-login',
+  [
+    check('address').exists(),
+    check('email').exists().isEmail()
+  ]
+)
+
+// These routes will be disabled until 
+// router.put(`/:accountId`, (req, res) => {
+//   return AccountService.updateAccount(req.params.accountId, req.body)
+//       .then((acc) => {
+//         res.status(200).send(acc.toJSON());
+//       })
+//       .catch((err) => {
+//         res.sendStatus(500);
+//       });
+// });
+
+// router.delete(`/:accountId`, (req, res) => {
+//   return AccountService.deleteAccount(req.params.accountId)
+//       .then(() => {
+//         res.sendStatus(200);
+//       })
+//       .catch((err) => {
+//         res.sendStatus(404);
+//       });
+//});
 
 
 module.exports = router;
