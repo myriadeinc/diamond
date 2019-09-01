@@ -29,6 +29,7 @@
         "algorithm": "__REPLACE__"
     },
     "mail": {
+        "enable": true,
         "sendgrid_key": "__REPLACE__"
     },
     "passwords": {

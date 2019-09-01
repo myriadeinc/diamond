@@ -81,6 +81,25 @@ const AccountServices = {
   // Account Service Ops
 
   /**
+   * Check if email already exists
+   * @param {string} email
+   * @return {boolean}
+   */
+  emailExists: async (email) => {
+    let account = await AccountModel.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (account) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  },
+
+  /**
    * Validate a pair of password and email, if successful returns account
    *    otherwise returns empty object
    * @param {string} email
