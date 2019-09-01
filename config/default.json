@@ -17,6 +17,12 @@
             "pattern": "^.+\\.js$"
         }
     },
+    "cache": {
+        "host": "localhost",
+        "port": 6379,
+        "user": "",
+        "db": "0"
+    },
     "jwt": {
         "public_key": "__REPLACE__",
         "private_key": "__REPLACE__",
