@@ -3,13 +3,16 @@
 /*eslint-disable */
 const router = require('express').Router();
 /* eslint-enable */
+const { check } = require('express-validator');
 
 const AccountService = require('src/services/accounts.service.js');
+const EmailVerificationMiddleware = require('src/middleware/email.validation.middleware.js');
+const RequestValidationMiddleware = require('src/middleware/request.validation.middleware.js');
 
-// TO-DO: Need to add validation middleware
 
-router.get(`/:accountId`, (req, res) => {
-  return AccountService.getAccount(req.params.accountId)
+router.get(`/:accountId`, 
+  (req, res) => {
+    return AccountService.getAccount(req.params.accountId)
       .then((acc) => {
         res.status(200).send(acc.toJSON());
       })
@@ -18,10 +21,15 @@ router.get(`/:accountId`, (req, res) => {
       });
 });
 
-router.post('/', (req, res) => {
-  // NOTE THIS WILL NOT BE THE ACTUAL FLOW FOR ACCOUNT CREATION
-  //  WILL NEED EMAIL VALIDATION FIRST...
-  return AccountService.createAccount(req.body)
+router.post('/', 
+  [
+    check('email_token').exists(),
+    check('password').exists()
+  ],
+  RequestValidationMiddleware.handleErrors,
+  EmailVerificationMiddleware.validateToken,
+  (req, res, next) => {
+    return AccountService.createAccount(req.body)
       .then((acc) => {
         res.status(200).send(acc);
       })
