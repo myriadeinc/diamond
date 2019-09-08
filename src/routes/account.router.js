@@ -21,7 +21,7 @@ router.post('/create',
     ],
     RequestValidationMiddleware.handleErrors,
     EmailVerificationMiddleware.validateToken,
-    (req, res, next) => {
+    (req, res) => {
       return AccountService.createAccount(req.body)
           .then((acc) => {
             res.status(200).send(acc);
@@ -37,7 +37,7 @@ router.post('/login',
       check('password').exists(),
     ],
     RequestValidationMiddleware.handleErrors,
-    (req, res, next) => {
+    (req, res) => {
       return AccountService.validatePassword(req.body.email, req.body.password)
           .then((acc) => {
             return TokenService.createAccessToken(acc);
@@ -59,8 +59,20 @@ router.post('/address-login',
       check('email').exists().isEmail(),
     ],
     RequestValidationMiddleware.handleErrors,
-    (req, res, next) => {
-      
+    AuthMiddleware.authenticateSharedSecret,
+    (req, res) => {
+      return AccountService.validateStrantum(req.body.address, req.body.email)
+        .then((acc) => {
+            return TokenService.createAccessToken(acc);
+        })
+        .then((tok) => {
+          res.status(200).send({
+            accessToken: tok,
+          });
+        })
+        .catch((err) => {
+          res.status(500).send(err);
+        });
     }
 );
 

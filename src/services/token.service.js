@@ -34,6 +34,7 @@ const TokenService = {
       account: {
         email: account.email,
         name: account.name,
+        address: account.wallet_address
       },
 
     }, {
