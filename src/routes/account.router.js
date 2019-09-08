@@ -57,7 +57,11 @@ router.post('/address-login',
     [
       check('address').exists(),
       check('email').exists().isEmail(),
-    ]
+    ],
+    RequestValidationMiddleware.handleErrors,
+    (req, res, next) => {
+      
+    }
 );
 
 router.get(`/:accountId`,
