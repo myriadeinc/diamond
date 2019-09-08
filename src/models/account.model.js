@@ -40,7 +40,7 @@ const AccountModel = DB.sequelize.define('Accounts', {
 
   wallet_address: {
     type: DB.Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
 
   name: {
@@ -138,7 +138,7 @@ AccountModel.cleanName = (name) => {
 
 AccountModel.validFields = ['email', 'name',
   'firstName', 'lastName', 'phoneNumber',
-  'gender', 'birthday', 'credential', 'wallet_address'
+  'gender', 'birthday', 'credential', 'wallet_address',
 ];
 
 AccountModel.prototype.toJSON = function(unsafe = false) {
@@ -149,7 +149,7 @@ AccountModel.prototype.toJSON = function(unsafe = false) {
   const self = this;
   const json = [
     'name', 'firstName', 'lastName',
-    'email', 'wallet_address'
+    'email', 'wallet_address',
   ]
       .map((key) => {
         return [key, self.get(key)];

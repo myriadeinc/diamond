@@ -126,11 +126,10 @@ const AccountServices = {
     return await AccountModel.findOne({
       where: {
         email,
-        wallet_address: address
-      }
-    })
-
-  }
+        wallet_address: address,
+      },
+    });
+  },
 
 };
 

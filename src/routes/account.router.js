@@ -62,17 +62,17 @@ router.post('/address-login',
     AuthMiddleware.authenticateSharedSecret,
     (req, res) => {
       return AccountService.validateStrantum(req.body.address, req.body.email)
-        .then((acc) => {
+          .then((acc) => {
             return TokenService.createAccessToken(acc);
-        })
-        .then((tok) => {
-          res.status(200).send({
-            accessToken: tok,
+          })
+          .then((tok) => {
+            res.status(200).send({
+              accessToken: tok,
+            });
+          })
+          .catch((err) => {
+            res.status(500).send(err);
           });
-        })
-        .catch((err) => {
-          res.status(500).send(err);
-        });
     }
 );
 
