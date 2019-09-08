@@ -122,6 +122,15 @@ const AccountServices = {
     return account;
   },
 
+  validateStrantum: async (address, email) => {
+    return await AccountModel.findOne({
+      where: {
+        email,
+        wallet_address: address,
+      },
+    });
+  },
+
 };
 
 module.exports = AccountServices;

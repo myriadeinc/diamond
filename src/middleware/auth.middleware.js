@@ -1,7 +1,20 @@
 'use strict';
 const TokenService = require('src/services/token.service.js');
-
+const config = require('src/util/config.js');
 const AuthMiddleware = {
+
+  authenticateSharedSecret: (req, res, next) => {
+    if (req.headers.authorization
+        && req.headers.authorization.split(' ')[0] === 'SharedSecret'
+        && config.get('service:shared_secret') ===
+              req.headers.authorization.split(' ')[1]
+    ) {
+      next();
+    } else {
+      res.sendStatus(403);
+    }
+  },
+
   authenticateUser: (req, res, next) => {
     let tokenString;
     // check authorization header
