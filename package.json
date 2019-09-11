@@ -21,6 +21,7 @@
     "big-integer": "^1.6.44",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.12",
+    "bunyan-formatter": "^1.0.0",
     "egads": "^1.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",

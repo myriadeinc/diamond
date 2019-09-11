@@ -149,7 +149,7 @@ AccountModel.prototype.toJSON = function(unsafe = false) {
   const self = this;
   const json = [
     'name', 'firstName', 'lastName',
-    'email', 'wallet_address',
+    'wallet_address',
   ]
       .map((key) => {
         return [key, self.get(key)];

@@ -1,10 +1,13 @@
 'use strict';
-const bunyan = require('bunyan');
+const bunyan = require('bunyan')
+, bformat = require('bunyan-formatter')  
+, formatOut = bformat({ outputMode: 'short', level: 'debug'});
 
 // Later for production we can use LogDNA on the Bunyan stream
 
 const logger = bunyan.createLogger({
   name: 'diamond',
+  stream: formatOut
 });
 
 module.exports = {

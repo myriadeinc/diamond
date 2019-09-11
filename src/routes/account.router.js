@@ -63,7 +63,7 @@ router.post('/address-login',
     (req, res) => {
       return AccountService.validateStrantum(req.body.address, req.body.email)
           .then((acc) => {
-            return TokenService.createAccessToken(acc);
+            return TokenService.createAccessToken(acc.toJSON());
           })
           .then((tok) => {
             res.status(200).send({
