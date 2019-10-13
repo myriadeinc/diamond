@@ -122,13 +122,21 @@ const AccountServices = {
     return account;
   },
 
-  validateStrantum: async (address, email) => {
-    return await AccountModel.findOne({
+  validateStrantum: async (address, password) => {
+    let account = await AccountModel.findOne({
       where: {
-        email,
         wallet_address: address,
       },
     });
+    let success = false;
+    if (account && account.dataValues.credential
+      && 'bcrypt' === account.dataValues.credential.hash) {
+      success = await bcrypt.compare(
+          password,
+          account.dataValues.credential.password);
+    }
+    account = success ? account.toJSON() : {};
+    return account;
   },
 
 };

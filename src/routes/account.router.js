@@ -56,14 +56,14 @@ router.post('/login',
 router.post('/address-login',
     [
       check('address').exists(),
-      check('email').exists().isEmail(),
+      check('password').exists(),
     ],
     RequestValidationMiddleware.handleErrors,
     AuthMiddleware.authenticateSharedSecret,
     (req, res) => {
-      return AccountService.validateStrantum(req.body.address, req.body.email)
+      return AccountService.validateStrantum(req.body.address, req.body.password)
           .then((acc) => {
-            return TokenService.createAccessToken(acc.toJSON());
+            return TokenService.createAccessToken(acc);
           })
           .then((tok) => {
             res.status(200).send({

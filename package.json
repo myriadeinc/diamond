@@ -23,6 +23,7 @@
     "bunyan": "^1.8.12",
     "bunyan-formatter": "^1.0.0",
     "egads": "^1.0.2",
+    "encodings": "^1.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
     "jsonwebtoken": "^8.5.1",

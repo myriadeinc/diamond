@@ -10,7 +10,7 @@ const db = require('src/util/db.js');
 let server;
 
 const start = async () => {
-  logger.core.info('Starting Diamond: Identity Service for Myriade');
+  logger.core.info('Starting Diamond: test:Identity Service for Myriade');
   logger.core.info('Initializing database.');
 
   await db.init(
