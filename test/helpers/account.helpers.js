@@ -15,6 +15,7 @@ let sampleUsers = [
     {
         name: "user0",
         externalId: uuid(),
+        wallet_address: '0x1',
         email: 'user0@gmail.com',
         credential: {
             password: '',
@@ -24,6 +25,7 @@ let sampleUsers = [
     {
         name: "user1",
         externalId: uuid(),
+        wallet_address: '0x2',
         email: 'user1@gmail.com',
         credential: {
             password: '',
@@ -33,6 +35,7 @@ let sampleUsers = [
     {
         name: "user2",
         externalId: uuid(),
+        wallet_address: '0x3',
         email: 'user2@gmail.com',
         credential: {
             password: '',

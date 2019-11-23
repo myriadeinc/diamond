@@ -55,7 +55,8 @@ describe('Account Service Unit tests', () => {
         const data = {
             name: 'usr3',
             email: 'usr3@gmail.com',
-            password: 'usr3'
+            password: 'usr3',
+            wallet_address: '0x4',
         };
         const res = await AccountService.createAccount(data);
         res.should.not.be.null;

@@ -4,10 +4,9 @@ RUN apt update && apt install -y nodejs npm
 WORKDIR /usr/src/app
 
 COPY . .
-RUN npm install
 RUN chmod 777 /usr/src/app
 
-EXPOSE 8081
+EXPOSE 8180
 EXPOSE 9873
 
 CMD node /usr/src/app/src/main.js
