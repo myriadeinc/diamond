@@ -118,8 +118,10 @@ const AccountServices = {
           password,
           account.dataValues.credential.password);
     }
-    account = success ? account.toJSON() : {};
-    return account;
+    if (!success) {
+      throw new Err.Account('Failed Login');
+    }
+    return account.toJSON();
   },
 
   validateStrantum: async (address, password) => {

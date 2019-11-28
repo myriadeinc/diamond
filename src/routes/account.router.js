@@ -14,22 +14,33 @@ const AuthMiddleware = require('src/middleware/auth.middleware.js');
 
 const TokenService = require('src/services/token.service.js');
 
+const Err = require('src/util/error.js');
+const logger = require('src/util/logger.js');
+
 router.post('/create',
-    [
-      check('email_token').exists(),
-      check('password').exists(),
-    ],
-    RequestValidationMiddleware.handleErrors,
-    EmailVerificationMiddleware.validateToken,
-    (req, res) => {
-      return AccountService.createAccount(req.body)
-          .then((acc) => {
-            res.status(200).send(acc);
-          })
-          .catch((err) => {
-            res.sendStatus(500);
-          });
-    });
+  [
+    check('email_token').exists(),
+    check('password').exists(),
+  ],
+  RequestValidationMiddleware.handleErrors,
+  EmailVerificationMiddleware.validateToken,
+  (req, res) => {
+    return AccountService.createAccount(req.body)
+      .then((acc) => {
+        res.status(200).send(acc);
+      })
+      .catch((err) => {
+        if (err instanceof Err.Account){
+          logger.account.error(`Failed Account Creation ${req.body.email}`);
+          logger.account.error(`  Reason: ${err.message}`);
+          res.status(err.status).send(err.message);
+        }
+        else{
+          res.sendStatus(500);
+        }
+      });
+  }
+);
 
 router.post('/login',
     [
@@ -39,17 +50,23 @@ router.post('/login',
     RequestValidationMiddleware.handleErrors,
     (req, res) => {
       return AccountService.validatePassword(req.body.email, req.body.password)
-          .then((acc) => {
-            return TokenService.createAccessToken(acc);
-          })
-          .then((tok) => {
-            res.status(200).send({
-              accessToken: tok,
-            });
-          })
-          .catch((err) => {
-            res.status(500).send(err);
+        .then((acc) => {
+          return TokenService.createAccessToken(acc);
+        })
+        .then((tok) => {
+          res.status(200).send({
+            accessToken: tok,
           });
+        })
+        .catch((err) => {
+          if (err instanceof Err.Account){
+            logger.account.info(`Failed login for ${req.body.email}`);
+            res.status(err.status).send(err.message);
+          }
+          else {
+            res.status(500).send(err);
+          }
+        });
     }
 );
 
@@ -71,7 +88,13 @@ router.post('/address-login',
             });
           })
           .catch((err) => {
-            res.status(500).send(err);
+            if (err instanceof Err.Account){
+              logger.account.info(`Failed login for ${req.body.address}`);
+              res.status(err.status).send(err.message);
+            }
+            else {
+              res.status(500).send(err);
+            }
           });
     }
 );
@@ -80,13 +103,20 @@ router.get(`/:accountId`,
     AuthMiddleware.authenticateUser,
     (req, res) => {
       return AccountService.getAccount(req.accountId)
-          .then((acc) => {
-            res.status(200).send(acc.toJSON());
-          })
-          .catch((err) => {
-            res.sendStatus(404);
-          });
-    });
+        .then((acc) => {
+          res.status(200).send(acc.toJSON());
+        })
+        .catch((err) => {
+          if (err instanceof Err.Account){
+            logger.account.info(`Failed fetching account for ${req.accountId}`);
+            res.status(err.status).send(err.message);
+          }
+          else {
+            res.status(500).send(err);
+          }
+        });
+    }
+);
 
 router.put(`/:accountId`,
     AuthMiddleware.authenticateUser,
@@ -96,7 +126,13 @@ router.put(`/:accountId`,
             res.status(200).send(acc.toJSON());
           })
           .catch((err) => {
-            res.sendStatus(500);
+            if (err instanceof Err.Account){
+              logger.account.info(`Failed updating account for ${req.accountId}`);
+              res.status(err.status).send(err.message);
+            }
+            else {
+              res.status(500).send(err);
+            }
           });
     });
 

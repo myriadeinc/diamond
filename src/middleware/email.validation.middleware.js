@@ -1,15 +1,23 @@
 'use strict';
 
-const encryption = require('src/util/encryption.js');
+const cache = require('src/util/cache.js');
+const Err = require('src/util/error.js');
 
 const EmailValidationMiddleware = {
-  validateToken: (req, res, next) => {
-    if (req.body.email) {
-      delete req.body.email;
+  validateToken: async (req, res, next) => {
+    const tok = req.body.email_token;
+
+    const email = await cache.get(tok, 'Email::Confirmation')
+    console.log(email, tok);
+
+    if (email){
+      req.body.email = email;
+      await cache.delete(tok, 'Email::Confirmation');
+      next();
     }
-    const email = encryption.decrypt(req.body.email_token);
-    req.body.email = email;
-    next();
+    else {
+      return res.status(403).send('Invalid email token');
+    }  
   },
 };
 

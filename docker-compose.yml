@@ -8,7 +8,7 @@ services:
         context: ./
         dockerfile: Dockerfile.dev
     image: myriade/diamond:dev
-    command: ["bash", "-c", "npm run migration:up && npm run start:dev"]
+    command: ["bash", "-c", "npm install && npm run migration:up && npm run start:dev"]
     environment:
       - NODE_ENV=local
     volumes:
@@ -18,6 +18,8 @@ services:
       - "9873:9873"
     depends_on:
       db:
+        condition: service_healthy
+      cache:
         condition: service_healthy
   db:
     image: postgres:9.6
@@ -34,5 +36,14 @@ services:
       interval: 1s
       timeout: 1s
       retries: 100
+  cache:
+    image: redis:3.2.3
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: "redis-cli -h localhost ping | grep -q 'PONG'"
+      interval: 1s
+      timeout: 1s
+      retries: 60
 volumes:
   db_data:

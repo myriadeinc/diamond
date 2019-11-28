@@ -6,18 +6,23 @@ require('app-module-path').addPath(rootPath);
 const config = require('src/util/config.js');
 const logger = require('src/util/logger.js');
 const db = require('src/util/db.js');
+const cache = require('src/util/cache.js');
 
 let server;
 
 const start = async () => {
   logger.core.info('Starting Diamond: test:Identity Service for Myriade');
+  
   logger.core.info('Initializing database.');
-
   await db.init(
       config.get('db'),
       logger.db
   );
   logger.core.info('Database initialized.');
+
+  logger.core.info('Initializing cache');
+  await cache.init(config.get('cache'));
+  logger.core.info('Cache initialized');
 
   const port = config.get('port');
   const app = require('./app');
