@@ -8,13 +8,12 @@ const Umzug = require('umzug');
 
 delete require('pg').native;
 
-
 const getOptions = (opt, log) => {
   if (opt.dialect_options) {
     opt.dialectOptions = opt.dialect_options;
     delete opt.dialect_options;
   }
-
+  
   const Options = _.defaults({}, opt, {
     dialect: 'postgres',
     database: 'postgres',

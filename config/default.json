@@ -17,13 +17,17 @@
             "path": "migrations/",
             "model_name": "Migrations",
             "pattern": "^.+\\.js$"
+        },
+        "dialect_options": {
+            "ssl": true
         }
     },
     "cache": {
         "host": "cache",
         "port": 6379,
         "user": "",
-        "db": "0"
+        "db": "0",
+        "password": ""
     },
     "jwt": {
         "public_key": "__REPLACE__",

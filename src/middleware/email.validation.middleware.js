@@ -8,8 +8,6 @@ const EmailValidationMiddleware = {
     const tok = req.body.email_token;
 
     const email = await cache.get(tok, 'Email::Confirmation')
-    console.log(email, tok);
-
     if (email){
       req.body.email = email;
       await cache.delete(tok, 'Email::Confirmation');

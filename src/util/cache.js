@@ -8,8 +8,8 @@ let redisClient;
 
 const Cache = {
 
-  init: (conf) => {
-    redisClient = redis.createClient(conf);
+  init: async (conf) => {
+    redisClient = await redis.createClient(conf);
   },
 
   parse: (rawString) => {

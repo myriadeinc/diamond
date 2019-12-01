@@ -7,9 +7,9 @@ class MailerAPI {
   /**
    * @param {string} apiKey
    */
-  constructor(apiKey=null) {
+  constructor() {
     this.sgMail = require('@sendgrid/mail');
-    this.sgMail.setApiKey(apiKey ? apiKey : config.get('mail:sendgrid_key'));
+    this.sgMail.setApiKey(config.get('mail:sendgrid_key'));
   }
 
   /**
