@@ -53,11 +53,6 @@ jobs:
           command: |
             npm run test
       - run:
-          name: Rebuild production dependencies
-          command: |
-            rm -rf node_modules
-            npm install --production
-      - run:
           name: Build Docker image
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
