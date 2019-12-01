@@ -35,6 +35,9 @@
             "access_token": 5184000
         }
     },
+    "log": {
+        "logdna_api_token": "__REPLACE__"
+    },
     "mail": {
         "enable": false,
         "sendgrid_key": "__REPLACE__"

@@ -27,6 +27,7 @@ router.post('/create',
   (req, res) => {
     return AccountService.createAccount(req.body)
       .then((acc) => {
+        logger.account.info(`Account created for ${acc}`)
         res.status(200).send(acc);
       })
       .catch((err) => {
@@ -54,6 +55,7 @@ router.post('/login',
           return TokenService.createAccessToken(acc);
         })
         .then((tok) => {
+          logger.account.info(`Successful login for ${req.body.email}`)
           res.status(200).send({
             accessToken: tok,
           });
@@ -83,6 +85,7 @@ router.post('/address-login',
             return TokenService.createAccessToken(acc);
           })
           .then((tok) => {
+            logger.account.info(`Successful Strantum login for ${acc}`)
             res.status(200).send({
               accessToken: tok,
             });
