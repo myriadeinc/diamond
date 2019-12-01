@@ -21,13 +21,13 @@ router.post('/',
       }
       const recipient = req.body.email;
       EmailVerificationService.verifyEmail(recipient)
-          .then((valid) => {
-            if (valid) {
-              res.status(200).send('Email Confirmation Sent');
-            } else {
-              res.status(400).send(`Email ${recipient} is already in use`);
-            }
-          });
+        .then((valid) => {
+          if (valid) {
+            res.status(200).send('Email Confirmation Sent');
+          } else {
+            res.status(400).send(`Email ${recipient} is already in use`);
+          }
+        });
     });
 
 module.exports = router;

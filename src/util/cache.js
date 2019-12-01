@@ -1,13 +1,15 @@
 'use strict';
 
-const redis = require('promise-redis');
+const redis = require('promise-redis')();
+const _ = require('lodash');
+
 
 let redisClient;
 
 const Cache = {
 
-  init: (conf) => {
-    redisClient = redis.createClient(conf);
+  init: async (conf) => {
+    redisClient = await redis.createClient(conf);
   },
 
   parse: (rawString) => {
@@ -26,16 +28,24 @@ const Cache = {
     return val;
   },
 
-  put: (key, value) => {
-    return redisClient.set(key, Cache.stringify(value));
+  put: (key, value, namespace='') => {
+    const prefixed_key = `${namespace}::${key}`;
+    return redisClient.set(prefixed_key, Cache.stringify(value));
   },
 
-  get: (key) => {
-    return redisClient.get(key)
-        .then((res) => {
-          return Cache.parse(res);
-        });
+  get: (key, namespace='') => {
+    const prefixed_key = `${namespace}::${key}`;
+    return redisClient.get(prefixed_key)
+      .then((res) => {
+        return Cache.parse(res);
+      });
   },
+
+  delete: (key, namespace='') => {
+    const prefixed_key = `${namespace}::${key}`;
+    return redisClient.del(prefixed_key);
+  },
+
   close: () => {
     redisClient.quit();
   },

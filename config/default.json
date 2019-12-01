@@ -20,10 +20,11 @@
         }
     },
     "cache": {
-        "host": "localhost",
+        "host": "cache",
         "port": 6379,
         "user": "",
-        "db": "0"
+        "db": "0",
+        "password": ""
     },
     "jwt": {
         "public_key": "__REPLACE__",
