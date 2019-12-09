@@ -76,6 +76,30 @@ router.post('/address-login',
     }
 );
 
+router.post('/address-login-unsafe',
+    [
+      check('address').exists(),
+      check('password').exists(),
+    ],
+    RequestValidationMiddleware.handleErrors,
+    AuthMiddleware.authenticateSharedSecret,
+    (req, res) => {
+      // Remove this block once we set up proper validation with JWT
+      return AccountService.validateStrantum(req.body.address, req.body.password)
+        .then((acc) => {
+          res.status(200).send({
+            name: acc.name,
+            address: acc.wallet_address,
+            id: acc.id
+          });
+        })
+        .catch((err)=> {
+          res.status(500).send(err);
+        });
+
+    }
+);
+
 router.get(`/:accountId`,
     AuthMiddleware.authenticateUser,
     (req, res) => {

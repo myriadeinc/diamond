@@ -42,6 +42,7 @@ const TokenService = {
       subject: account.id,
     });
   },
+  
 };
 
 module.exports = TokenService;
