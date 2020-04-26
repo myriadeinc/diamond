@@ -28,7 +28,9 @@ const TokenService = {
   },
 
   createAccessToken: (account) => {
-    const expiry = config.get('jwt:expiry');
+    // TODO: Fix error where dividing by 1000 to get unix in seconds does not actually give right value
+    let expiry = Date.now() + 1000 * 60 * 60;
+    //expiry = Math.floor(expiry / 1000);
     return TokenService.encodeAndSign({
       version: 1,
       account: {
@@ -38,7 +40,7 @@ const TokenService = {
       },
 
     }, {
-      expiresIn: parseInt(expiry.access_token),
+      expiresIn: expiry,
       subject: account.id,
     });
   },
