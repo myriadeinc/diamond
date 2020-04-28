@@ -54,20 +54,20 @@ const AccountServices = {
   updateAccount: (accountId, data) => {
     data = _.omit(data, omittedFields);
     return AccountModel.update(
-        data,
-        {
-          where: {
-            externalId: accountId,
-          },
-        }
+      data,
+      {
+        where: {
+          externalId: accountId,
+        },
+      }
     )
-        .then(() => {
-          return AccountServices.getAccount(accountId);
-        })
-        .catch((err) => {
-          logger.error(err);
-          throw new Err.Account();
-        });
+      .then(() => {
+        return AccountServices.getAccount(accountId);
+      })
+      .catch((err) => {
+        logger.error(err);
+        throw new Err.Account();
+      });
   },
 
   deleteAccount: (accountId) => {
@@ -115,8 +115,8 @@ const AccountServices = {
     if (account && account.dataValues.credential
       && 'bcrypt' === account.dataValues.credential.hash) {
       success = await bcrypt.compare(
-          password,
-          account.dataValues.credential.password);
+        password,
+        account.dataValues.credential.password);
     }
     if (!success) {
       throw new Err.Account('Failed Login');
@@ -134,8 +134,8 @@ const AccountServices = {
     if (account && account.dataValues.credential
       && 'bcrypt' === account.dataValues.credential.hash) {
       success = await bcrypt.compare(
-          password,
-          account.dataValues.credential.password);
+        password,
+        account.dataValues.credential.password);
     }
     account = success ? account.toJSON() : {};
     return account;
