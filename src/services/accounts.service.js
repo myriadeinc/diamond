@@ -114,15 +114,13 @@ const AccountServices = {
     let success = false;
     if (account && account.dataValues.credential
       && 'bcrypt' === account.dataValues.credential.hash) {
-      // success = await bcrypt.compare(
-      //     password,
-      //     account.dataValues.credential.password);
-      success = true;
+      success = await bcrypt.compare(
+        password,
+        account.dataValues.credential.password);
     }
     if (!success) {
       throw new Err.Account('Failed Login');
     }
-    console.log(account.toJSON());
     return account.toJSON();
   },
 
