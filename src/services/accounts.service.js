@@ -1,41 +1,57 @@
-'use strict';
-const _ = require('lodash');
-const bcrypt = require('bcrypt');
-const config = require('src/util/config.js');
-const logger = require('src/util/logger.js').account;
-const Err = require('src/util/error.js');
-const AccountModel = require('src/models/account.model.js');
+"use strict";
+const _ = require("lodash");
+const bcrypt = require("bcrypt");
+const config = require("src/util/config.js");
+const logger = require("src/util/logger.js").account;
+const Err = require("src/util/error.js");
+const AccountModel = require("src/models/account.model.js");
 
 const hashPassword = (pwd) => {
-  const numHashSaltRounds = Number(config.get('passwords:hash_salt_rounds'));
+  const numHashSaltRounds = Number(config.get("passwords:hash_salt_rounds"));
   return bcrypt.hash(pwd, numHashSaltRounds);
 };
 
-const omittedFields = [
-  'externalId',
-  'id',
-  'createdAt',
-  'updatedAt',
-];
+const omittedFields = ["externalId", "id", "createdAt", "updatedAt"];
 
 const AccountServices = {
-
   // CRUD
   createAccount: async (data) => {
     if (!data.password) {
-      logger.error('Failed to submit the password field');
+      logger.error("Failed to submit the password field");
       throw new Err.Account();
     }
     const hashedPassword = await hashPassword(data.password);
     delete data.password;
     data.credential = {
       password: hashedPassword,
-      hash: 'bcrypt',
+      hash: "bcrypt",
     };
     const filteredData = _.pick(data, AccountModel.validFields);
     let acc;
     try {
       acc = await AccountModel.create(filteredData);
+    } catch (err) {
+      logger.error(err);
+      throw new Err.Account();
+    }
+    return acc.toJSON();
+  },
+
+  resetPassword: async (data) => {
+    if (!data.password) {
+      logger.error("Failed to submit the password field");
+      throw new Err.Account();
+    }
+    const hashedPassword = await hashPassword(data.password);
+    delete data.password;
+    data.credential = {
+      password: hashedPassword,
+      hash: "bcrypt",
+    };
+    const filteredData = _.pick(data, AccountModel.validFields);
+    let acc;
+    try {
+      acc = await AccountModel.resetPassword(filteredData);
     } catch (err) {
       logger.error(err);
       throw new Err.Account();
@@ -53,14 +69,11 @@ const AccountServices = {
 
   updateAccount: (accountId, data) => {
     data = _.omit(data, omittedFields);
-    return AccountModel.update(
-      data,
-      {
-        where: {
-          externalId: accountId,
-        },
-      }
-    )
+    return AccountModel.update(data, {
+      where: {
+        externalId: accountId,
+      },
+    })
       .then(() => {
         return AccountServices.getAccount(accountId);
       })
@@ -112,14 +125,18 @@ const AccountServices = {
       },
     });
     let success = false;
-    if (account && account.dataValues.credential
-      && 'bcrypt' === account.dataValues.credential.hash) {
+    if (
+      account &&
+      account.dataValues.credential &&
+      "bcrypt" === account.dataValues.credential.hash
+    ) {
       success = await bcrypt.compare(
         password,
-        account.dataValues.credential.password);
+        account.dataValues.credential.password
+      );
     }
     if (!success) {
-      throw new Err.Account('Failed Login');
+      throw new Err.Account("Failed Login");
     }
     return account.toJSON();
   },
@@ -131,16 +148,19 @@ const AccountServices = {
       },
     });
     let success = false;
-    if (account && account.dataValues.credential
-      && 'bcrypt' === account.dataValues.credential.hash) {
+    if (
+      account &&
+      account.dataValues.credential &&
+      "bcrypt" === account.dataValues.credential.hash
+    ) {
       success = await bcrypt.compare(
         password,
-        account.dataValues.credential.password);
+        account.dataValues.credential.password
+      );
     }
     account = success ? account.toJSON() : {};
     return account;
   },
-
 };
 
 module.exports = AccountServices;
