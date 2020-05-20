@@ -7,3 +7,7 @@ Identity service for Myriade mining pool. Single source of truth in miner accoun
 ## Local Build
 
 Ports: 8180, 9873
+
+## Staging Build
+
+URL: https://staging.myriade.io/id
