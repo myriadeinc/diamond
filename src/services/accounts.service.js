@@ -1,6 +1,7 @@
 'use strict';
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const config = require('src/util/config.js');
 const logger = require('src/util/logger.js').account;
 const Err = require('src/util/error.js');
@@ -47,6 +48,13 @@ const AccountServices = {
     return AccountModel.findOne({
       where: {
         externalId: accountId,
+      },
+    });
+  },
+  getAccountByEmail: (email) => {
+    return AccountModel.findOne({
+      where: {
+        email,
       },
     });
   },
@@ -98,6 +106,24 @@ const AccountServices = {
     }
   },
 
+  // New Passwords will always use argon2
+  newPassword: async (accountId, newPass) => {
+    const hashedPassword = await argon2.hash(newPass);
+    const credential = {
+      hash: 'argon2',
+      password: hashedPassword
+    }
+    return AccountModel.update(
+      credential,
+      {
+        where: {
+          externalId: accountId,
+        },
+      }
+    )
+
+  },
+
   /**
    * Validate a pair of password and email, if successful returns account
    *    otherwise returns empty object
@@ -112,11 +138,16 @@ const AccountServices = {
       },
     });
     let success = false;
-    if (account && account.dataValues.credential
-      && 'bcrypt' === account.dataValues.credential.hash) {
-      success = await bcrypt.compare(
-        password,
-        account.dataValues.credential.password);
+    if (account && account.dataValues.credential) {
+      if ('bcrypt' === account.dataValues.credential.hash) {
+        success = await bcrypt.compare(
+          password,
+          account.dataValues.credential.password);
+      }
+      else if ('argon2' === account.dataValues.credential.hash) {
+        success = await argon2.verify(account.dataValues.credential.password, password);
+      }
+
     }
     if (!success) {
       throw new Err.Account('Failed Login');

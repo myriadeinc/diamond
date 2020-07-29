@@ -103,6 +103,38 @@ router.post('/address-login',
   }
 );
 
+router.post('/reset',
+  [
+    check('email').exists().isEmail(),
+    check('token').exists(),
+    check('password').exists(),
+  ],
+  RequestValidationMiddleware.handleErrors,
+  EmailVerificationMiddleware.validateResetToken,
+  (req, res) => {
+    return AccountService.getAccountByEmail(req.body.email)
+      .then((acc) => {
+        return AccountService.newPassword(acc.externalId, req.body.password)
+      })
+      .then(acc => {
+        logger.account.info(`Successful password reset for ${acc.toJSON().email}`)
+        return res.status(200).send({
+          reset: true
+        })
+      })
+      .catch(err => {
+        if (err instanceof Err.Account) {
+          logger.account.info(`Failed account update for ${req.body.email}`);
+          return res.status(err.status).send(err.message);
+        }
+        else {
+          logger.account.err(`Failed account update for ${req.body.email}`);
+          return res.status(500).send(err);
+        }
+      });
+  }
+);
+
 router.get(`/:accountId`,
   AuthMiddleware.authenticateUser,
   (req, res) => {
