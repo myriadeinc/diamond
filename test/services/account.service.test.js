@@ -24,16 +24,16 @@ describe('Account Service Unit tests', () => {
 
     before('Setting up some dummy accounts', async () => {
         await AccountHelpers.clearAllAccounts();
-        await AccountHelpers.createSampleAccounts(); 
-    }) ;
+        await AccountHelpers.createSampleAccounts();
+    });
 
     after('Cleanup', () => {
         return AccountHelpers.clearAllAccounts();
     })
 
-    
 
-    it('Should fetch an user', async() => {
+
+    it('Should fetch an user', async () => {
         const usr = await AccountService.getAccount(
             AccountHelpers.sampleUsers[0].externalId
         );
@@ -45,6 +45,17 @@ describe('Account Service Unit tests', () => {
         const usr = AccountHelpers.sampleUsers[0];
         // since here are using our name as password
         const res = await AccountService.validatePassword(usr.email, usr.name);
+        res.should.not.be.null;
+        res.name.should.equal(usr.name);
+        res.email.should.equal(usr.email);
+        res.id.should.equal(usr.externalId);
+    });
+    it('Should reset a user password', async () => {
+        const usr = AccountHelpers.sampleUsers[0];
+        const testPassword = "hunter2";
+        // since here are using our name as password
+        const resetAccount = await AccountService.newPassword(usr.externalId, testPassword);
+        const res = await AccountService.validatePassword(usr.email, testPassword);
         res.should.not.be.null;
         res.name.should.equal(usr.name);
         res.email.should.equal(usr.email);
