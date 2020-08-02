@@ -1,15 +1,14 @@
 'use strict';
 const _ = require('lodash');
-const bcrypt = require('bcrypt');
 const argon2 = require('argon2');
 const config = require('src/util/config.js');
 const logger = require('src/util/logger.js').account;
 const Err = require('src/util/error.js');
 const AccountModel = require('src/models/account.model.js');
 
-const hashPassword = (pwd) => {
-  const numHashSaltRounds = Number(config.get('passwords:hash_salt_rounds'));
-  return bcrypt.hash(pwd, numHashSaltRounds);
+const hashPassword = async (pwd) => {
+  const p = await argon2.hash(pwd);
+  return p;
 };
 
 const omittedFields = [
@@ -31,7 +30,7 @@ const AccountServices = {
     delete data.password;
     data.credential = {
       password: hashedPassword,
-      hash: 'bcrypt',
+      hash: 'argon2',
     };
     const filteredData = _.pick(data, AccountModel.validFields);
     let acc;
@@ -139,14 +138,10 @@ const AccountServices = {
     });
     let success = false;
     if (account && account.dataValues.credential) {
-      if ('bcrypt' === account.dataValues.credential.hash) {
-        success = await bcrypt.compare(
-          password,
-          account.dataValues.credential.password);
-      }
-      else if ('argon2' === account.dataValues.credential.hash) {
+      if ('argon2' === account.dataValues.credential.hash) {
         success = await argon2.verify(account.dataValues.credential.password, password);
       }
+      console.log(`Hash used was ${account.dataValues.credential.hash}`);
 
     }
     if (!success) {
@@ -163,8 +158,8 @@ const AccountServices = {
     });
     let success = false;
     if (account && account.dataValues.credential
-      && 'bcrypt' === account.dataValues.credential.hash) {
-      success = await bcrypt.compare(
+      && 'argon2' === account.dataValues.credential.hash) {
+      success = await argon2.verify(
         password,
         account.dataValues.credential.password);
     }

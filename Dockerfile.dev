@@ -1,12 +1,19 @@
-FROM ubuntu:18.04
-RUN apt update && apt install -y nodejs npm 
+FROM node:12.18.3-buster-slim
 
-WORKDIR /usr/src/app
+  WORKDIR /usr/src/app
 
-COPY . .
-RUN chmod 777 /usr/src/app
+  
+  RUN chown -R node:node /usr/src/app
+  # Fuck it
+  RUN chmod -R 777 /usr/src/app
+#   USER node
+  # Bundle app source
+  COPY . /usr/src/app/
+  # fuck
+  RUN mkdir node_modules
+  RUN chmod -R 777 ./node_modules
 
-EXPOSE 8180
-EXPOSE 9873
+  RUN npm install --production
 
-CMD node /usr/src/app/src/main.js
+  # We don't run "npm start" because we don't want npm to manage the SIGTERM signal
+  CMD [ "node", "src/main.js" ] 

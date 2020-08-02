@@ -12,7 +12,8 @@ services:
     environment:
       - NODE_ENV=local
     volumes:
-      - ./:/usr/src/app
+      - ./:/usr/src/app:rw
+      - /usr/src/app/node_modules
     ports:
       - "8081:8081"
       - "9873:9873"
