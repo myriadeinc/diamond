@@ -50,11 +50,12 @@ describe('Account Service Unit tests', () => {
         res.email.should.equal(usr.email);
         res.id.should.equal(usr.externalId);
     });
+
     it('Should reset a user password', async () => {
         const usr = AccountHelpers.sampleUsers[0];
         const testPassword = "hunter2";
         // since here are using our name as password
-        const resetAccount = await AccountService.newPassword(usr.externalId, testPassword);
+        const resetAccount = await AccountService.newPassword(usr.externalId, testPassword, usr.email);
         const res = await AccountService.validatePassword(usr.email, testPassword);
         res.should.not.be.null;
         res.name.should.equal(usr.name);

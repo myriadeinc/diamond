@@ -107,19 +107,19 @@ const AccountServices = {
 
   // New Passwords will always use argon2
   newPassword: async (accountId, newPass) => {
+    let account = await AccountModel.findOne({
+      where: {
+        externalId: accountId
+      },
+    });
+
     const hashedPassword = await argon2.hash(newPass);
     const credential = {
       hash: 'argon2',
       password: hashedPassword
     }
-    return AccountModel.update(
-      credential,
-      {
-        where: {
-          externalId: accountId,
-        },
-      }
-    )
+    return account.update({ credential });
+
 
   },
 
@@ -141,8 +141,6 @@ const AccountServices = {
       if ('argon2' === account.dataValues.credential.hash) {
         success = await argon2.verify(account.dataValues.credential.password, password);
       }
-      console.log(`Hash used was ${account.dataValues.credential.hash}`);
-
     }
     if (!success) {
       throw new Err.Account('Failed Login');

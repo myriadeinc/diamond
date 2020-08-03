@@ -1,11 +1,12 @@
-FROM node:12.18.3-buster-slim
+FROM node:12.18.3-buster
+  WORKDIR /usr/src/app
+
   RUN chown -R node:node /usr/src/app
-  # Fuck it
-  RUN chmod -R 777 /usr/src/app
+  
   USER node
   # Bundle app source
   COPY . /usr/src/app/
-  # fuck
+  
   RUN mkdir node_modules
   RUN chmod -R 777 ./node_modules
 

@@ -11,12 +11,12 @@ const cache = require('src/util/cache.js');
 let server;
 
 const start = async () => {
-  logger.core.info('Starting Diamond: test:Identity Service for Myriade');
-  
+  logger.core.info('Starting Diamond: Identity Service for Myriade');
+
   logger.core.info('Initializing database.');
   await db.init(
-      config.get('db'),
-      logger.db
+    config.get('db'),
+    logger.db
   );
   logger.core.info('Database initialized.');
 
@@ -54,7 +54,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 start()
-    .catch((err) => {
-      logger.core.error(err);
-      process.exit(1);
-    });
+  .catch((err) => {
+    logger.core.error(err);
+    process.exit(1);
+  });

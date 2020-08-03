@@ -1,15 +1,14 @@
 'use strict';
 const testing = require('../test.init.js');
 
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const uuid = require('uuid/v4');
 
 const AccountModel = require('src/models/account.model.js');
 
 const hashPassword = (pwd) => {
-    const numHashSaltRounds = Number(testing.config.get('passwords:hash_salt_rounds'));
-    return bcrypt.hash(pwd, numHashSaltRounds);
-  };
+    return argon2.hash(pwd);
+};
 
 let sampleUsers = [
     {
@@ -19,7 +18,7 @@ let sampleUsers = [
         email: 'user0@gmail.com',
         credential: {
             password: '',
-            hash: 'bcrypt'
+            hash: 'argon2'
         }
     },
     {
@@ -29,7 +28,7 @@ let sampleUsers = [
         email: 'user1@gmail.com',
         credential: {
             password: '',
-            hash: 'bcrypt'
+            hash: 'argon2'
         }
     },
     {
@@ -39,7 +38,7 @@ let sampleUsers = [
         email: 'user2@gmail.com',
         credential: {
             password: '',
-            hash: 'bcrypt'
+            hash: 'argon2'
         }
     }
 ];
