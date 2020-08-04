@@ -10,7 +10,7 @@ const mailer = new MailerApi();
 
 const cache = require('src/util/cache.js')
 
-const resetEmailBody = (token, email) => {
+const resetEmailBody = (email, token) => {
   return {
     subject: 'Confirm your email',
     text: `It appears that you have requested a password reset from Myriade. Please click on the link below to confirm your e-mail and proceed with password reset: 
