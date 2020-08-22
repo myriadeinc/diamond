@@ -2,6 +2,7 @@
 
 /*eslint-disable */
 const router = require('express').Router();
+const faker = require('faker')
 /* eslint-enable */
 const { check } = require('express-validator');
 
@@ -39,6 +40,37 @@ router.post('/create',
         else {
           res.sendStatus(500);
         }
+      });
+  }
+);
+
+router.get('/newFakeAccount',
+  AuthMiddleware.authenticateSharedSecret,
+  (req, res) => {
+    const password = faker.random.word() + faker.random.word() + faker.random.word()
+    const account = {
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      password,
+      email: faker.internet.email(),
+      wallet_address: faker.finance.bitcoinAddress()
+    }
+
+    return AccountService.createAccount(account)
+      .then(async (acc) => {
+        logger.account.info(`Account created for ${acc.email}`)
+        acc.token = await TokenService.createAccessToken(acc)
+        acc.rawPass = password
+
+        return res.status(200).send(acc)
+      })
+      .catch((err) => {
+        if (err instanceof Err.Account) {
+          logger.account.error(`Failed Account Creation ${req.body.email}`);
+          logger.account.error(`Reason: ${err.message}`);
+          return res.status(err.status).send(err.message);
+        }
+        return res.sendStatus(500);
+
       });
   }
 );

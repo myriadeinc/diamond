@@ -33,7 +33,7 @@ const should = require('chai')
 // Catch them, and die on them, in a noisy, violent manner.
 process.on('unhandledRejection', (reason, promise) => {
     /* eslint-disable no-console */
-    console.error('Unhandled promise rejection:'); 
+    console.error('Unhandled promise rejection:');
     console.error(reason);
     process.exit(57);
     // If you noticed an exit code of 57, and grepped for it, now you know why.
@@ -43,7 +43,7 @@ process.on('unhandledRejection', (reason, promise) => {
 after('Cleanup', () => {
     return Promise.all([
         dbReady.then(() => { return db.close(); }),
-     ]);
+    ]);
 });
 
 module.exports = {

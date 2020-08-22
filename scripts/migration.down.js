@@ -21,6 +21,7 @@ const config = require('nconf')
     .file('environment', { file: `config/${process.env.NODE_ENV}.json` })
     .file('defaults', { file: 'config/default.json' });
 
+
 db.init(config.get('db'), logger.db)
     .then(() => {
         return db.umzug.executed();
@@ -35,7 +36,7 @@ db.init(config.get('db'), logger.db)
             logger.db.info(message);
 
         }
-        logger.db.info(`found matching migration ${JSON.stringify(matchingMigration)}`);
+        logger.db.info(`Found matching migration ${JSON.stringify(matchingMigration)}`);
         return db.umzug.down({ to: matchingMigration[0].file });
     })
     .then((migrations) => {
