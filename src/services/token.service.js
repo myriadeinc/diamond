@@ -8,8 +8,8 @@ const config = require('src/util/config.js');
 const TokenService = {
 
   encodeAndSign: (data, options) => {
-    return jwt.sign(data, config.get('jwt:private_key'), _.extend({}, options, {
-      algorithm: config.get('jwt:algorithm'),
+    return jwt.sign(data, config.get('jwt:private_key').trim(), _.extend({}, options, {
+      algorithm: config.get('jwt:algorithm') || 'RS256',
       jwtid: uuid.v4(),
       issuer: config.get('service:name'),
     }));
@@ -19,7 +19,7 @@ const TokenService = {
     return new Promise((resolve, reject) => {
       let decodedToken;
       try {
-        decodedToken = jwt.verify(token, config.get('jwt:public_key'));
+        decodedToken = jwt.verify(token, config.get('jwt:public_key').trim());
       } catch (err) {
         return reject(err);
       }

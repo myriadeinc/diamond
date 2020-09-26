@@ -29,7 +29,7 @@
     "jwt": {
         "public_key": "__REPLACE__",
         "private_key": "__REPLACE__",
-        "algorithm": "RS512",
+        "algorithm": "RS256",
         "expiry": {
             "refresh_token": 5184000,
             "access_token": 5184000
