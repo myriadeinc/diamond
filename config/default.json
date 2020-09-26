@@ -2,7 +2,7 @@
     "service": {
         "name": "diamond",
         "host": "0.0.0.0:8180",
-        "shared_secret": "__REPLACE__"
+        "shared_secret": ""
     },
     "port": 8180,
     "db": {
@@ -27,25 +27,19 @@
         "password": ""
     },
     "jwt": {
-        "public_key": "__REPLACE__",
-        "private_key": "__REPLACE__",
-        "algorithm": "RS512",
+        "public_key": "",
+        "private_key": "",
+        "algorithm": "RS256",
         "expiry": {
             "refresh_token": 5184000,
             "access_token": 5184000
         }
     },
     "log": {
-        "logdna_api_token": "__REPLACE__"
+        "logdna_api_token": ""
     },
     "mail": {
         "enable": false,
-        "sendgrid_key": "__REPLACE__"
-    },
-    "passwords": {
-        "hash_salt_rounds": 10,
-        "minimum_strength_score": 1,
-        "minimum_length": 8,
-        "maximum_length": 64
+        "sendgrid_key": ""
     }
 }
