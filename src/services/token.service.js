@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 'use strict';
 
 const _ = require('lodash');
@@ -9,7 +10,7 @@ const TokenService = {
 
   encodeAndSign: (data, options) => {
     return jwt.sign(data, config.get('jwt:private_key'), _.extend({}, options, {
-      algorithm: config.get('jwt:algorithm'),
+      algorithm: 'RS256',
       jwtid: uuid.v4(),
       issuer: config.get('service:name'),
     }));
@@ -30,7 +31,7 @@ const TokenService = {
   createAccessToken: (account) => {
     // TODO: Fix error where dividing by 1000 to get unix in seconds does not actually give right value
     let expiry = Date.now() + 1000 * 60 * 60;
-    //expiry = Math.floor(expiry / 1000);
+    expiry = Math.floor(expiry / 1000);
     return TokenService.encodeAndSign({
       version: 1,
       account: {
