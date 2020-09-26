@@ -55,12 +55,9 @@ router.get('/newFakeAccount',
       wallet_address: faker.finance.bitcoinAddress()
     }
 
-    return AccountService.createAccount(account)
-      .then(async (acc) => {
-        logger.account.info(`Account created for ${acc.email}`)
-        acc.token = await TokenService.createAccessToken(acc)
+    return AccountService.createAccountWithToken(account)
+      .then(acc => {
         acc.rawPass = password
-
         return res.status(200).send(acc)
       })
       .catch((err) => {

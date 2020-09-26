@@ -42,6 +42,12 @@ const AccountServices = {
     }
     return acc.toJSON();
   },
+  createAccountWithToken: async (data) => {
+    let baseAccount = AccountServices.createAccount(data);
+    const token = await TokenService.createAccessToken(acc);
+    baseAccount.token = token
+    return baseAccount;
+  },
 
   getAccount: (accountId) => {
     return AccountModel.findOne({
