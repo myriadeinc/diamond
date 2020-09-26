@@ -47,7 +47,7 @@ router.post('/create',
 router.get('/newFakeAccount',
   AuthMiddleware.authenticateSharedSecret,
   (req, res) => {
-    const password = faker.random.word() + faker.random.word() + faker.random.word()
+    const password = faker.internet.password()
     const account = {
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       password,

@@ -5,6 +5,7 @@ const config = require('src/util/config.js');
 const logger = require('src/util/logger.js').account;
 const Err = require('src/util/error.js');
 const AccountModel = require('src/models/account.model.js');
+const TokenService = require('src/services/token.service.js');
 
 const hashPassword = async (pwd) => {
   const p = await argon2.hash(pwd);
@@ -43,9 +44,16 @@ const AccountServices = {
     return acc.toJSON();
   },
   createAccountWithToken: async (data) => {
-    let baseAccount = AccountServices.createAccount(data);
-    const token = await TokenService.createAccessToken(acc);
-    baseAccount.token = token
+    let baseAccount
+    try {
+      baseAccount = await AccountServices.createAccount(data);
+      const token = await TokenService.createAccessToken(baseAccount);
+      baseAccount.token = token
+    }
+    catch (e) {
+      logger.error(e)
+      baseAccount = { error: true }
+    }
     return baseAccount;
   },
 
