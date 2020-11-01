@@ -142,7 +142,7 @@ router.post('/reset',
   EmailVerificationMiddleware.validateResetToken,
   (req, res) => {
     return AccountService.getAccountByEmail(req.body.email)
-      .then((acc) => {
+      .then(acc => {
         return AccountService.newPassword(acc.externalId, req.body.password)
       })
       .then(acc => {
@@ -157,10 +157,10 @@ router.post('/reset',
           return res.status(err.status).send(err.message);
         }
         else {
-          logger.account.err(`Failed account update for ${req.body.email}`);
+          logger.account.error(`Failed account update for ${req.body.email}`);
           return res.status(500).send(err);
         }
-      });
+      })
   }
 );
 
