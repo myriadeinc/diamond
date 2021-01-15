@@ -149,9 +149,10 @@ AccountModel.prototype.toJSON = function(unsafe = false) {
   const self = this;
   const json = [
     'name', 'firstName', 'lastName',
+    'balance',
     'wallet_address', 'email'
   ]
-      .map((key) => {
+      .map(key => {
         return [key, self.get(key)];
       })
       .filter(([field, value]) => {
