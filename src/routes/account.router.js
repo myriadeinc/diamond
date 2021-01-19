@@ -164,7 +164,7 @@ router.post('/reset',
   }
 );
 
-router.get(`/:accountId`,
+router.get(`/self`,
   AuthMiddleware.authenticateUser,
   (req, res) => {
     return AccountService.getAccount(req.accountId)
