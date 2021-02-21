@@ -163,6 +163,7 @@ AccountModel.prototype.toJSON = function(unsafe = false) {
       }, {});
 
   json.id = this.get('externalId');
+  json.shortId = this.get('id');
 
   return json;
 };
