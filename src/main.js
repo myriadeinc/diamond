@@ -7,11 +7,16 @@ const config = require('src/util/config.js');
 const logger = require('src/util/logger.js');
 const db = require('src/util/db.js');
 const cache = require('src/util/cache.js');
+const metrics = require('src/util/metrics.js');
 
 let server;
 
 const start = async () => {
+
+
   logger.core.info('Starting Diamond: Identity Service for Myriade');
+  logger.core.info('Starting Internal Server Metrics');
+  metrics.init('Diamond');
 
   logger.core.info('Initializing database.');
   await db.init(

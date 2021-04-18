@@ -3,7 +3,8 @@
 const express = require('express');
 const routes = require('src/routes');
 const bodyParser = require('body-parser');
-
+const config = require("src/util/config.js");
+const metrics = require('src/util/metrics.js');
 const app = express();
 
 app.use((req, res, next) => {
@@ -27,7 +28,19 @@ app.use(bodyParser.json());
 app.use('/v1', routes);
 
 app.get('/healthcheck', (req, res, next) => {
+  const route = req.originalUrl;
+  const end = metrics.httpRequestDurationMicroseconds.startTimer();
   res.sendStatus(200);
+  end({ route, code: res.statusCode, method: req.method })
 });
 
+app.get('/prometheus', async (req, res) => {
+
+
+  const a = await metrics.registry.metrics()
+  console.dir(a)
+  // res.end('as')
+  // res.setHeader('Content-Type', metrics.registry.contentType)
+  res.send(a)
+});
 module.exports = app;
