@@ -8,7 +8,7 @@ const RequestValidationMiddleware = {
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()});
     }
-    next();
+    return next();
   },
 };
 

@@ -29,16 +29,16 @@ router.post('/create',
     return AccountService.createAccount(req.body)
       .then((acc) => {
         logger.account.info(`Account created for ${acc}`)
-        res.status(200).send(acc);
+        return res.status(200).send(acc);
       })
       .catch((err) => {
         if (err instanceof Err.Account) {
           logger.account.error(`Failed Account Creation ${req.body.email}`);
           logger.account.error(`  Reason: ${err.message}`);
-          res.status(err.status).send(err.message);
+          return res.status(err.status).send(err.message);
         }
         else {
-          res.sendStatus(500);
+          return res.sendStatus(500);
         }
       });
   }
@@ -85,18 +85,18 @@ router.post('/login',
       })
       .then((tok) => {
         logger.account.info(`Successful login for ${req.body.email}`)
-        res.status(200).send({
+        return res.status(200).send({
           accessToken: tok,
         });
       })
       .catch((err) => {
         if (err instanceof Err.Account) {
           logger.account.info(`Failed login for ${req.body.email}`);
-          res.status(err.status).send(err.message);
+          return res.status(err.status).send(err.message);
         }
         else {
           console.log(err);
-          res.status(500).send(err);
+          return res.status(500).send(err);
         }
       });
   }
@@ -116,17 +116,17 @@ router.post('/address-login',
       })
       .then((tok) => {
         logger.account.info(`Successful Strantum login for ${acc}`)
-        res.status(200).send({
+        return res.status(200).send({
           accessToken: tok,
         });
       })
       .catch((err) => {
         if (err instanceof Err.Account) {
           logger.account.info(`Failed login for ${req.body.address}`);
-          res.status(err.status).send(err.message);
+          return res.status(err.status).send(err.message);
         }
         else {
-          res.status(500).send(err);
+          return res.status(500).send(err);
         }
       });
   }
@@ -169,15 +169,15 @@ router.get(`/self`,
   (req, res) => {
     return AccountService.getAccount(req.accountId)
       .then((acc) => {
-        res.status(200).send(acc.toJSON());
+        return res.status(200).send(acc.toJSON());
       })
       .catch((err) => {
         if (err instanceof Err.Account) {
           logger.account.info(`Failed fetching account for ${req.accountId}`);
-          res.status(err.status).send(err.message);
+          return res.status(err.status).send(err.message);
         }
         else {
-          res.status(500).send(err);
+          return res.status(500).send(err);
         }
       });
   }
@@ -188,15 +188,15 @@ router.put(`/:accountId`,
   (req, res) => {
     return AccountService.updateAccount(req.accountId, req.body)
       .then((acc) => {
-        res.status(200).send(acc.toJSON());
+        return res.status(200).send(acc.toJSON());
       })
       .catch((err) => {
         if (err instanceof Err.Account) {
           logger.account.info(`Failed updating account for ${req.accountId}`);
-          res.status(err.status).send(err.message);
+          return res.status(err.status).send(err.message);
         }
         else {
-          res.status(500).send(err);
+          return res.status(500).send(err);
         }
       });
   });
@@ -206,10 +206,10 @@ router.delete(`/:accountId`,
   (req, res) => {
     return AccountService.deleteAccount(req.accountId)
       .then(() => {
-        res.sendStatus(200);
+        return res.sendStatus(200);
       })
       .catch((err) => {
-        res.sendStatus(404);
+        return res.sendStatus(404);
       });
   });
 

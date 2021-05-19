@@ -29,17 +29,17 @@ const AuthMiddleware = {
     }
 
     if (!tokenString) {
-      res.sendStatus(403);
+      return res.sendStatus(403);
     }
 
     return TokenService.decodeAndVerify(tokenString)
       .then((token) => {
         req.accountId = token.sub;
         req.token = token;
-        next();
+        return next();
       })
       .catch((err) => {
-        res.status(403).send(err);
+        return res.status(403).send(err);
       });
   },
 };
