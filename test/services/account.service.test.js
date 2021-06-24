@@ -28,7 +28,6 @@ describe('Account Service Unit tests', () => {
     });
 
     after('Cleanup', () => {
-        cache.close()
         return AccountHelpers.clearAllAccounts();
     })
 
