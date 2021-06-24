@@ -4,7 +4,7 @@ const testing = require('../test.init.js');
 
 const AccountService = require('src/services/accounts.service.js');
 const AccountHelpers = require('test/helpers/account.helpers.js');
-
+const cache = require('src/util/cache.js')
 require('chai')
     .use(require('chai-as-promised'))
     .use(require('chai-string'))
@@ -28,9 +28,20 @@ describe('Account Service Unit tests', () => {
     });
 
     after('Cleanup', () => {
+        cache.close()
         return AccountHelpers.clearAllAccounts();
     })
 
+
+    // Leaving commented instead of removed for future reference on timing-based test
+    // it('Should test redis', async () => {
+    //     await cache.init('redis://cache:6379');
+    //    await cache.put("123y",{a:"n"})
+    //    await new Promise(r => setTimeout(r, 10));
+    //    const t = await cache.get("123y");
+    //    t.a.should.not.be.null;
+        
+    // });
 
 
     it('Should fetch an user', async () => {

@@ -13,14 +13,14 @@ const cache = require('src/util/cache.js')
 const resetEmailBody = (email, token) => {
   return {
     subject: 'Confirm your email',
-    text: `It appears that you have requested a password reset from Myriade. Please click on the link below to confirm your e-mail and proceed with password reset: 
+    text: `It appears that you have requested a password reset from Myriade. Please click on the link below to confirm your e-mail and proceed with password reset (The link will expire in 1 hour): 
     https://myriade.io/#/forgotpassword?token=${token}&email=${email}
     
     If you did not request a password reset on Myriade, feel free to ignore this e-mail
     Thank you!`,
     html: `
     <div>
-      <h5>It appears that you have requested a password reset from Myriade. Please click on the link provided to confirm your e-mail and proceed with password reset</h5>
+      <h5>It appears that you have requested a password reset from Myriade. Please click on the link provided to confirm your e-mail and proceed with password reset (The link will expire in 1 hour)</h5>
       <p>
       If you did not request a password reset on Myriade, feel free to ignore this e-mail</p>
       <table width="100%" cellspacing="0" cellpadding="0">
@@ -58,14 +58,14 @@ const EmailVerificationService = {
       await cache.put(tok, email, 'Email::Confirmation');
       await mailer.send(email, {
         subject: 'Confirm your email',
-        text: `Thank you for registrating your e-mail on Myriade. Please click on the link below to confirm your e-mail and proceed with account creation: 
+        text: `Thank you for registrating your e-mail on Myriade. Please click on the link below to confirm your e-mail and proceed with account creation (The link will expire in 1 hour): 
         https://myriade.io/#/signup?token=${tok}
         
         If you did not request an account creation on Myriade, feel free to ignore this e-mail
         Thank you!`,
         html: `
         <div>
-          <h5>Thank you for registrating your e-mail on Myriade. Please click on the link below to confirm your e-mail and proceed with account creation</h5>
+          <h5>Thank you for registrating your e-mail on Myriade. Please click on the link below to confirm your e-mail and proceed with account creation (The link will expire in 1 hour)</h5>
           <p>If you did not request an account creation on Myriade, feel free to ignore this e-mail</p>
           <table width="100%" cellspacing="0" cellpadding="0">
             <tr>

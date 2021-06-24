@@ -30,7 +30,8 @@ const Cache = {
 
   put: (key, value, namespace='') => {
     const prefixed_key = `${namespace}::${key}`;
-    return redisClient.set(prefixed_key, Cache.stringify(value));
+    // For now, set expiry to 1 hour
+    return redisClient.set(prefixed_key, Cache.stringify(value),"EX", 3600);
   },
 
   get: (key, namespace='') => {
