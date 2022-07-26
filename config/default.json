@@ -19,13 +19,6 @@
             "pattern": "^.+\\.js$"
         }
     },
-    "cache": {
-        "host": "cache",
-        "port": 6379,
-        "user": "",
-        "db": "0",
-        "password": ""
-    },
     "jwt": {
         "public_key": "__REPLACE__",
         "private_key": "__REPLACE__",
