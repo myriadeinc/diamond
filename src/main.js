@@ -24,10 +24,13 @@ const start = async () => {
     logger.db
   );
   logger.core.info('Database initialized.');
-
-  logger.core.info('Initializing cache');
+  try {
   await cache.init(config.get('cache'));
   logger.core.info('Cache initialized');
+  } catch (e){
+    logger.core.error(e)
+    logger.core.error('Could not init cache')
+  }
 
   const port = config.get('port');
   const app = require('./app');
