@@ -25,7 +25,7 @@
     "bunyan-formatter": "^1.0.0",
     "egads": "^1.0.2",
     "encodings": "^1.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-validator": "^6.6.1",
     "faker": "^5.1.0",
     "gelf-stream": "^1.1.1",
